@@ -3,7 +3,7 @@
 pip3 install --upgrade pip
 pip3 install atheris
 
-cp $SRC/tools/fuzz_framework/fuzz_targets/calc_fuzzer.py $OUT/
+cp $SRC/tools/fuzz_framework/fuzz_targets/calc_fuzzer.py $OUT/calc_fuzzer
 
 echo "[*] Listing files in $OUT"
 ls -lh $OUT
