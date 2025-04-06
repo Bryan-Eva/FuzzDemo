@@ -5,6 +5,7 @@ set -e
 PROJECT_NAME=FuzzDemo
 PROJECT_DIR=$(pwd)/tools/fuzz/frame
 OSS_FUZZ_DIR=/tmp/oss-fuzz
+LINK_PATH="$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
 
 echo "[*] Preparing OSS-Fuzz framework..."
 
@@ -15,12 +16,17 @@ else
     echo "[*] OSS-Fuzz already exists at $OSS_FUZZ_DIR. Skipping clone."
 fi
 
+echo "[*] Linking project to oss-fuzz/projects/$PROJECT_NAME"
+mkdir -p "$OSS_FUZZ_DIR/projects"
+rm -rf "$LINK_PATH"
+ln -s "$PROJECT_DIR" "$LINK_PATH"
+
 mkdir -p "$PROJECT_DIR/logs"
 
 echo "[*] Building Docker fuzz image for project: $PROJECT_NAME"
 
 cd "$OSS_FUZZ_DIR"
-python3 infra/helper.py build_image "$PROJECT_NAME" --project_dir="$PROJECT_DIR"
+python3 infra/helper.py build_image "$PROJECT_NAME"
 
 echo "[*] Running fuzzer..."
 python3 infra/helper.py run_fuzzer "$PROJECT_NAME" fuzz_calc -- --runs=10000 2>&1 | tee "$PROJECT_DIR/logs/fuzz_log.txt"
