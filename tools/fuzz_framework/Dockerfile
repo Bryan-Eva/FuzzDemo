@@ -1,3 +1,5 @@
-FROM gcr.io/oss-fuzz-base/base-python
+FROM python:3.9-slim
 
-COPY . $SRC/
+RUN pip install --upgrade pip && pip install atheris
+
+COPY . /src
