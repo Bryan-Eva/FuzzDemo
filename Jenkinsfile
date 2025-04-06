@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PROJECT_NAME = "fuzzdemo"
+    }
+
     stages {
         stage('Set Permissions') {
             steps {

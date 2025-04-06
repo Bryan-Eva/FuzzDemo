@@ -2,7 +2,7 @@
 
 set -e
 
-PROJECT_NAME=FuzzDemo
+PROJECT_NAME=fuzzdemo
 PROJECT_DIR=$(pwd)/tools/fuzz/frame
 OSS_FUZZ_DIR=/tmp/oss-fuzz
 LINK_PATH="$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
