@@ -3,4 +3,4 @@
 pip3 install --upgrade pip
 pip3 install atheris
 
-cp $SRC/tools/fuzz_framework/fuzz_targets/fuzz_calc.py $OUT/
+cp $SRC/tools/fuzz_framework/fuzz_targets/calc_fuzzer.py $OUT/

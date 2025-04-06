@@ -29,6 +29,6 @@ cd "$OSS_FUZZ_DIR"
 python3 infra/helper.py build_image "$PROJECT_NAME" --no-pull
 
 echo "[*] Running fuzzer..."
-python3 infra/helper.py run_fuzzer "$PROJECT_NAME" fuzz_calc -- --runs=10000 2>&1 | tee "$PROJECT_DIR/logs/fuzz_log.txt"
+python3 infra/helper.py run_fuzzer "$PROJECT_NAME" calc_fuzzer -- --runs=10000 2>&1 | tee "$PROJECT_DIR/logs/fuzz_log.txt"
 
 echo "[*] Fuzzing completed. Crash log (if any) saved to $PROJECT_DIR/logs/fuzz_log.txt"
