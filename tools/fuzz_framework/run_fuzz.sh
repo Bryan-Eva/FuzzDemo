@@ -19,14 +19,17 @@ else
 fi
 
 rm -f "$PROJECT_DIR/Dockerfile"
+rm -f "$PROJECT_DIR/project.yaml"
+echo "language: python" > "$PROJECT_DIR/project.yaml"
 
 echo "[*] Linking project to oss-fuzz/projects/$PROJECT_NAME"
 mkdir -p "$OSS_FUZZ_DIR/projects"
 rm -rf "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
 ln -s "$PROJECT_DIR" "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
 
-echo "[*] Contents i oss-fuzz project dir:"
+echo "[*] Final check for Dockerfile and project.yaml"
 ls -lh "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
+cat "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/project.yaml" || echo "❌ project.yaml MISSING"
 
 chmod +x "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/build.sh"
 
