@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# === check docker login === 
+echo "[DEBUG] DockerHub: Auth..."
+docker info | grep bryanjhuo || echo "Not login dockerhub"
+
 # === pull python:3.8-slim ===
 docker pull python:3.8-slim || echo "[!] Docker pull default"
 
