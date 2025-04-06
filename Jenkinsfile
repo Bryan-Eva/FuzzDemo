@@ -23,6 +23,7 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'tools/fuzz_framework/logs/**/*.txt', fingerprint: true
+            sh 'cat /tmp/build_invoked.txt' || echo "build.sh not exec!"
         }
     }
 }
