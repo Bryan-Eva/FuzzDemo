@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 PROJECT_NAME=fuzzdemo
@@ -18,7 +17,7 @@ mkdir -p "$PROJECT_TARGET"
 cp "$PROJECT_DIR/build.sh" "$PROJECT_TARGET/"
 cp "$PROJECT_DIR/project.yaml" "$PROJECT_TARGET/"
 mkdir -p "$PROJECT_TARGET/fuzz_targets"
-cp "$PROJECT_TARGET/fuzz_targets/calc_fuzzer.py" "$PROJECT_TARGET/fuzz_targets/"
+cp "$PROJECT_DIR/fuzz_targets/calc_fuzzer.py" "$PROJECT_TARGET/fuzz_targets/"
 
 rm -f "$PROJECT_TARGET/Dockerfile"
 
