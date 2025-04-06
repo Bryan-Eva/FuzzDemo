@@ -21,6 +21,9 @@ mkdir -p "$OSS_FUZZ_DIR/projects"
 rm -rf "$LINK_PATH"
 ln -s "$PROJECT_DIR" "$LINK_PATH"
 
+echo "[*] Listing contents in linked project dir:"
+ls -lh "$LINK_PATH"
+
 mkdir -p "$PROJECT_DIR/logs"
 
 echo "[*] Building Docker fuzz image for project: $PROJECT_NAME"
