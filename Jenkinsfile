@@ -7,6 +7,18 @@ pipeline {
                 checkout scm
             }
         }
+        
+        stage('Dockerhub login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                sh '''
+                    echo "[*] Logging in to DockerHub as $DOCKER_USER"
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                     docker info | grep Username || echo "[!] Login may have failed."
+                '''
+                }
+            }
+        }
 
         stage('Run ClusterFuzz') {
             steps {
