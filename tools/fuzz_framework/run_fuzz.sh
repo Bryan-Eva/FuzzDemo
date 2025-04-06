@@ -34,7 +34,7 @@ mkdir -p "$PROJECT_DIR/logs"
 echo "[*] Building Docker fuzz image for project: $PROJECT_NAME"
 
 cd "$OSS_FUZZ_DIR"
-python3 infra/helper.py build_image "$PROJECT_NAME" --no-pull
+python3 infra/helper.py build_fuzzers "$PROJECT_NAME" --no-pull
 
 echo "[*] Running fuzzer..."
 python3 infra/helper.py run_fuzzer "$PROJECT_NAME" calc_fuzzer -- --runs=10000 2>&1 | tee "$PROJECT_DIR/logs/fuzz_log.txt"
