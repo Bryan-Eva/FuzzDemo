@@ -31,7 +31,7 @@ ls -l "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/build.sh"
 
 mkdir -p "$PROJECT_DIR/logs"
 
-echo "[*] Building Docker fuzz image for project: $PROJECT_NAME"
+echo "[*] Building fuzzers for project: $PROJECT_NAME"
 
 cd "$OSS_FUZZ_DIR"
 python3 infra/helper.py build_fuzzers "$PROJECT_NAME"
