@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# === pull python:3.8-slim ===
+docker pull python:3.8-slim || echo "[!] Docker pull default"
+
 # === basic parameter confing ===
 PROJECT_NAME="fuzzdemo"
 PROJECT_DIR=$(pwd)
