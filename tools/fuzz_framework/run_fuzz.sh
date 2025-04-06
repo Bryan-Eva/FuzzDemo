@@ -22,6 +22,7 @@ fi
 
 # === user docker run fuzz test ===
 echo "[*] Building Docker image for fuzzing..."
+export DOCKER_BUILDKIT=0
 docker build -t fuzzdemo-fuzzer "$FRAMEWORK_DIR"
 
 echo "[*] Running fuzzer container..."
