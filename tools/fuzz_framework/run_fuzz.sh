@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+PROJECT_NAME=FuzzDemo
+PROJECT_DIR=$(pwd)/tools/fuzz/frame
+OSS_FUZZ_DIR=/tmp/oss-fuzz
+
+echo "[*] Preparing OSS-Fuzz framework..."
+
+if [ ! -d "$OSS_FUZZ_DIR" ]; then
+    echo "[*] Cloning OSS-Fuzz to $OSS_FUZZ_DIR..."
+    git clone https://github.com/google/oss-fuzz.git $OSS_FUZZ_DIR
+else
+    echo "[*] OSS-Fuzz already exists at $OSS_FUZZ_DIR. Skipping clone."
+fi
+
+mkdir -p "$PROJECT_DIR/logs"
+
+echo "[*] Building Docker fuzz image for project: $PROJECT_NAME"
+
+cd "$OSS_FUZZ_DIR"
+python3 infre/helper.py build_image "$PROJECT_NAME" --project_dir="$PROJECT_DIR"
+
+echo "[*] Running fuzzer..."
+python3 infre/helper.py run_fuzzer "$PROJECT_NAME" fuzz_calc -- --runs=10000 2>&1 | tee "$PROJECT_DIR/logs/fuzz_log.txt"
+
+echo "[*] Fuzzing completed. Crash log (if any) saved to $PROJECT_DIR/logs/fuzz_log.txt"
