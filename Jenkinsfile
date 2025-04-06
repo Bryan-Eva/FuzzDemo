@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.8-slim'
+            args '-u root'
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -7,16 +12,14 @@ pipeline {
                 checkout scm
             }
         }
-        
-        stage('Dockerhub login') {
+
+        stage('Install Dependencies') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                 sh '''
-                    echo "[*] Logging in to DockerHub as $DOCKER_USER"
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                     docker info | grep Username || echo "[!] Login may have failed."
+                  apt-get update && apt-get install -y git
+                  pip install --upgrade pip
+                  pip install atheris
                 '''
-                }
             }
         }
 
