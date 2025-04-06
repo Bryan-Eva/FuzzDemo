@@ -7,11 +7,13 @@ PROJECT_DIR=$(pwd)/tools/fuzz_framework
 OSS_FUZZ_DIR=/tmp/oss-fuzz
 LINK_PATH="$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
 
-echo "[*] Preparing OSS-Fuzz framework..."
+echo "[*] Full clean of oss-fuzz and linked project"
+rm -rf "$OSS_FUZZ_DIR"
 
+echo "[*] Preparing OSS-Fuzz framework..."
 if [ ! -d "$OSS_FUZZ_DIR" ]; then
     echo "[*] Cloning OSS-Fuzz to $OSS_FUZZ_DIR..."
-    git clone https://github.com/google/oss-fuzz.git $OSS_FUZZ_DIR
+    git clone https://github.com/google/oss-fuzz.git "$OSS_FUZZ_DIR"
 else
     echo "[*] OSS-Fuzz already exists at $OSS_FUZZ_DIR. Skipping clone."
 fi
