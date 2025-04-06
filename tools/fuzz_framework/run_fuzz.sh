@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "💥💥💥💥💥💥💥💥 THIS IS REAL run_fuzz.sh BEING EXECUTED💥💥💥💥💥"
 set -e
 
 PROJECT_NAME=fuzzdemo
