@@ -5,41 +5,28 @@ set -e
 PROJECT_NAME=fuzzdemo
 PROJECT_DIR=$(pwd)/tools/fuzz_framework
 OSS_FUZZ_DIR=/tmp/oss-fuzz
-LINK_PATH="$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
+PROJECT_TARGET="$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
 
-echo "[*] Full clean of oss-fuzz and linked project"
+echo "[*] Rebuilding OSS-Fuzz......"
 rm -rf "$OSS_FUZZ_DIR"
+git clone https://github.com/google/oss-fuzz.git "$OSS_FUZZ_DIR"
 
-echo "[*] Preparing OSS-Fuzz framework..."
-if [ ! -d "$OSS_FUZZ_DIR" ]; then
-    echo "[*] Cloning OSS-Fuzz to $OSS_FUZZ_DIR..."
-    git clone https://github.com/google/oss-fuzz.git "$OSS_FUZZ_DIR"
-else
-    echo "[*] OSS-Fuzz already exists at $OSS_FUZZ_DIR. Skipping clone."
-fi
+echo "[*] Preparing OSS-Fuzz project dir..."
+rm -rf "$PROJECT_TARGET"
+mkdir -p "$PROJECT_TARGET"
 
-rm -f "$PROJECT_DIR/Dockerfile"
-rm -f "$PROJECT_DIR/project.yaml"
-echo "language: python" > "$PROJECT_DIR/project.yaml"
+cp "$PROJECT_DIR/build.sh" "$PROJECT_TARGET/"
+cp "$PROJECT_DIR/project.yaml" "$PROJECT_TARGET/"
+mkdir -p "$PROJECT_TARGET/fuzz_targets"
+cp "$PROJECT_TARGET/fuzz_targets/calc_fuzzer.py" "$PROJECT_TARGET/fuzz_targets/"
 
-echo "[*] Linking project to oss-fuzz/projects/$PROJECT_NAME"
-mkdir -p "$OSS_FUZZ_DIR/projects"
-rm -rf "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
-ln -s "$PROJECT_DIR" "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
+rm -f "$PROJECT_TARGET/Dockerfile"
 
-echo "[*] Final check for Dockerfile and project.yaml"
-ls -lh "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
-cat "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/project.yaml" || echo "❌ project.yaml MISSING"
-
-chmod +x "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/build.sh"
-
-echo "[*] Verifying build.sh in linked path:"
-ls -l "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/build.sh"
+chmod +x "$PROJECT_TARGET/build.sh"
 
 mkdir -p "$PROJECT_DIR/logs"
 
 echo "[*] Building fuzzers for project: $PROJECT_NAME"
-
 cd "$OSS_FUZZ_DIR"
 python3 infra/helper.py build_fuzzers "$PROJECT_NAME"
 
