@@ -18,15 +18,17 @@ else
     echo "[*] OSS-Fuzz already exists at $OSS_FUZZ_DIR. Skipping clone."
 fi
 
+rm -f "$PROJECT_DIR/Dockerfile"
+
 echo "[*] Linking project to oss-fuzz/projects/$PROJECT_NAME"
 mkdir -p "$OSS_FUZZ_DIR/projects"
 rm -rf "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
-ln -sf "$PROJECT_DIR" "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
+ln -s "$PROJECT_DIR" "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
+
+echo "[*] Contents i oss-fuzz project dir:"
+ls -lh "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
 
 chmod +x "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/build.sh"
-
-echo "[*] Listing contents in linked project dir:"
-ls -lh "$OSS_FUZZ_DIR/projects/$PROJECT_NAME"
 
 echo "[*] Verifying build.sh in linked path:"
 ls -l "$OSS_FUZZ_DIR/projects/$PROJECT_NAME/build.sh"
