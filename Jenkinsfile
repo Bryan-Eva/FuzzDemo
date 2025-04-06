@@ -1,11 +1,19 @@
 pipeline {
     agent any
 
-    environment {
-        PROJECT_NAME = "fuzzdemo"
-    }
-
     stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Set Permissions') {
             steps {
                 sh 'chmod +x tools/fuzz_framework/build.sh'
@@ -22,8 +30,7 @@ pipeline {
 
     post {
         always {
-            // archiveArtifacts artifacts: 'tools/fuzz_framework/logs/**/*.txt', fingerprint: true
-            sh 'cat /tmp/build_invoked.txt || echo "build.sh not exec!"'
+            archiveArtifacts artifacts: 'tools/fuzz_framework/logs/**/*.txt', fingerprint: true
         }
     }
 }
