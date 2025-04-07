@@ -1,13 +1,6 @@
 #!/bin/bash
 set -e
 
-# === check docker login === 
-echo "[DEBUG] DockerHub: Auth..."
-docker info | grep bryanjhuo || echo "Not login dockerhub"
-
-# === pull python:3.8-slim ===
-docker pull python:3.8-slim || echo "[!] Docker pull default"
-
 # === basic parameter confing ===
 PROJECT_NAME="fuzzdemo"
 PROJECT_DIR=$(pwd)
@@ -24,10 +17,12 @@ if [ ! -d "$CLUSTERFUZZ_DIR" ]; then
     git clone https://github.com/google/clusterfuzz.git "$CLUSTERFUZZ_DIR"
 fi
 
-# === user docker run fuzz test ===
-echo "[*] Building Docker image for fuzzing..."
-export DOCKER_BUILDKIT=0
-docker build --pull=false -t fuzzdemo-fuzzer "$FRAMEWORK_DIR"
+# === exec fuzz task ===
+echo "[*] Running ClusterFuzz fuzz bot..."
+python3 "$CLUSTERFUZZ_DIR/src/python/bot/tasks/fuzz_task.py" \
+    --fuzzer_name=a_atheris \
+    --target_path="$FRAMEWORK_DIR/fuzz_targets/calc_fuzzer.py" \
+    --max_total_time=20 \
+    --output_path="$LOG_DIR"
 
-echo "[*] Running fuzzer container..."
-docker run --rm -v "$LOG_DIR:/out" fuzzdemo-fuzzer
+echo "[*]Done. Crash logs (if any) are in $LOG_DIR"
